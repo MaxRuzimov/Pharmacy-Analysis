@@ -7,7 +7,7 @@ from collections import Counter
 def find_top_chains_spark(claims_df, pharmacies):
 
 
-    spark = SparkSession.builder.appName("PharmacyAnalysis").getOrCreate()
+    spark = SparkSession.builder.appName("PharmacyAnalysis").master("local[10]").getOrCreate()
 
     claims_spark = spark.createDataFrame(claims_df)
     pharmacies_spark = spark.createDataFrame(pharmacies)
@@ -23,7 +23,7 @@ def find_top_chains_spark(claims_df, pharmacies):
 
 def find_most_common_quantities_spark(claims_df):
 
-    spark = SparkSession.builder.appName("PharmacyAnalysis").getOrCreate()
+    spark = SparkSession.builder.appName("PharmacyAnalysis").master("local[10]").getOrCreate()
     claims_spark = spark.createDataFrame(claims_df)
     quantity_counts = claims_spark.groupBy("ndc", "quantity").count()
     window_spec = Window.partitionBy("ndc").orderBy(col("count").desc())
